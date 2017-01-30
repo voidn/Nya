@@ -24,7 +24,7 @@ bot.Dispatcher.on(Event.MESSAGE_CREATE, e => {
                     match = match[2];
                 } else {
                     //Well shit son, you somehow ballsed up the url
-					return
+                    return
                 }
                 var request = require("request"),
                     //No more CHEERIO!?!? 

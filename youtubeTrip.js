@@ -3,7 +3,6 @@
 // 		Update bot and channel checking
 bot.Dispatcher.on(Event.MESSAGE_CREATE, e => {
     var vRX = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    if (e.message.content.search("youtu") !== -1) {
         if (e.message.content.search(vRX) !== -1) {
             //trip youtube info fetch
 
@@ -24,7 +23,7 @@ bot.Dispatcher.on(Event.MESSAGE_CREATE, e => {
                     match = match[2];
                 } else {
                     //Well shit son, you somehow ballsed up the url
-                    return
+					return
                 }
                 var request = require("request"),
                     //No more CHEERIO!?!? 
@@ -92,8 +91,5 @@ bot.Dispatcher.on(Event.MESSAGE_CREATE, e => {
                     };
                 })
             }
-        }
-    } else {
-        //Nothing ಠ_ಠ
-    }
+        } //Nothing ಠ_ಠ
 });

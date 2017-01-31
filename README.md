@@ -15,11 +15,12 @@ For simplicity, commands shall be included in "command.js", as they are in the c
 ## Commands
 1. [color (args)]: Resolves user's main role (The one that defines their color), and sets it to a user supplied value. 
 2. [awwnime]: Returns random picture from the front page of Awwnime and related reddit boards. 
-3. [mm]: Magic message test iterator. Still used for testing.
+3. [radio]: Attempts to retrieve title information from the current audio stream.
+4. [mm]: Magic message test iterator. Still used for testing.
 <p align="center">
 ![MagicMessage](http://i.imgur.com/abLK3Fv.gif "MagicMessage")
 </p>
-4. [sauce (args)]: Submits user supplied image to SauceNao (or IQDB) image search.
+5. [sauce (args)]: Submits user supplied image to SauceNao (or IQDB) image search.
 <p align="center">
 ![Pixiv result type](http://i.imgur.com/spLPspF.png "Pixiv result type")
 ![Pixiv result type](http://i.imgur.com/RmxprjD.png "Twitter result type")

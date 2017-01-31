@@ -13,7 +13,8 @@ For simplicity, commands shall be included in "command.js", as they are in the c
 </p>
 
 ## Commands
-1. [color (args)]: Resolves user's main role (The one that defines their color), and sets it to a user supplied value. 
+1. [color (args)]: Resolves user's main role (The one that defines their color), and sets it to a user supplied value.
+	- This requires [manage roles] and the bot to be elevated above those It's changing. 
 2. [awwnime]: Returns random picture from the front page of Awwnime and related reddit boards. 
 3. [radio]: Attempts to retrieve title information from the current audio stream.
 4. [mm]: Magic message test iterator. Still used for testing.

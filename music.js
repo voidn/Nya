@@ -1,4 +1,5 @@
 var internetradio = require('node-internet-radio');
+var v = require('../internal/voice.js')
 
 Commands.radio = {
   name: 'radio',

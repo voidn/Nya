@@ -22,11 +22,14 @@ For simplicity, commands shall be included in "command.js", as they are in the c
 ![MagicMessage](http://i.imgur.com/abLK3Fv.gif "MagicMessage")
 </p>
 5. [sauce (args)]: Submits user supplied image to SauceNao (or IQDB) image search.
+	- Embed displays -guessed- image from search, to aid visibility of result correctness.
 	- Currently, only link are the defining order, and are sorted from highest to lowest priority:
 	- Pixiv > Sankaku > e621 > default(if present)
 <p align="center">
-![Pixiv result type](http://i.imgur.com/spLPspF.png "Pixiv result type")
+![Pixiv result type](http://i.imgur.com/wfT7e28.png "Pixiv result type")
 ![Nonstandard/Other](http://i.imgur.com/rwc3XMn.png "Nonstandard/Other result type")
+![Incorrect result](http://i.imgur.com/HF5jSUi.png "Incorrect result")
+
 </p>
 
 

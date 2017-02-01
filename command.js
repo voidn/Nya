@@ -41,127 +41,100 @@ Commands.color = {
 }
 
 Commands.sauce = {
-  name: 'sauce',
-  help: "Submit an image for indexing on IQDB.",
-  aliases: ['source'],
-  module: 'default',
-  timeout: 10,
-  level: 0,
-  //To-Do: If entry has title, include in result?
-  
-  fn: function (msg, suffix, bot) {
-	if(suffix.length < 1){
-		msg.reply('You need an image to search!');
-	} else {
-    msg.channel.sendTyping()
-	url = "http://saucenao.com/search.php?db=999&url=" + suffix;
-	
-	//Alert for non-image
-	if (suffix.match(/\.(jpeg|jpg|gif|png)$/)){
-  
-	request(url, function (error, response, body) {
-	if (!error) {
-		var $ = cheerio.load(body),
-		  mpercent = $('div[class=resultsimilarityinfo]').html();
-		  pixcheck = $('div[class=resultcontentcolumn] strong:nth-child(1)').html();
-		  
-		  
-		  //Changing how information is sorted, as well as how results are categorized, becuase fuck the previous sorting
-		  testR = $('td[class=resulttablecontent]').html();
-		  testR = testR.replace(/<(?:.|\n)*?>/gm, ' ');
-		  entities = new Entities();
-		  testR = entities.decode(testR);
-		  var Rstring = testR, Pixivsubstring= "Pixiv ID", Twittersubstring= "Twitter";
-		  
-		  //Hierarchical Sorting
-		  if (Rstring.indexOf(Pixivsubstring) !== -1){
-			  Rtype = "Pixiv";
-		  } else if (Rstring.indexOf(Twittersubstring) !== -1) {
-			  Rtype = "Twitter";
-		  } else {
-			  Rtype = "Other";
-		  }
-		  
-		  //Stripping null values
-		  rawName = $('div[class=resulttitle]').html();
-		  if (rawName == null){
-			  rawName = "None";
-		  }
-		  rawArtist = $('div[class=resultcontentcolumn]').html();
-		  if (rawArtist == null){
-			  rawArtist = "None";
-		  }
-		  
-		  //But why
-		  safeName = rawName.replace("<strong>", "");
-		  safeArtist = rawArtist.replace("<strong>", "");
-		  
-		  //Global HTML Trash-it
-		  safeArtist = safeArtist.replace(/<(?:.|\n)*?>/gm, ' ');
-		  safeName = safeName.replace(/<(?:.|\n)*?>/gm, ' ');
-		  
-		  //Entities buffer works now.
-		  entities = new Entities();
-		  safeArtist = decodeURI(safeArtist);
-		  safeArtist = entities.decode(safeArtist);
-		  safeName = decodeURI(safeName);
-		  safeName = entities.decode(safeName);
-		  
-		  //Check if Twitter from rawArtist (For some reason, conventionally stripping HTML doesn't work here).
-		  //I've only kept this old section for Tmatch, and I'm too lazy to redo it for the new sorting,
-		  //Since the value "Twitter" has no use anymore.
-		  //In all reality, it should be moved to where the Result Type is identified.
-		  var string = rawArtist, substring= "Twitter";
-		  if (string.indexOf(substring) !== -1){
-			  Twitter = "True";
-			  //regex the twitter link from rawArtist
-			  Tmatch = rawArtist.match(/Source[\s\S]*Twitter/g)
-			  Tmatch = JSON.stringify(Tmatch)
-			  Tmatch = Tmatch.replace('["Source: </strong><a href=\\\"','')
-			  Tmatch = Tmatch.replace('\\\">Twitter\"]','')
-			  
-		  } else {
-			  Twitter = "False";
-		  }
-		  
-		  //Catch for null percent
-		  if (mpercent != null){
-			raw_mpercent = mpercent.replace('%','');
-		  } else {
-			raw_mpercent = "1%";
-		  }
-		  
-		  //Alert for questionable results
-		  if (raw_mpercent > 90){
-			  pb = "High ";
-		  } else {
-			  pb = "¯\\_(ツ)\_/¯ ";
-		  }
-		  
-		  //Specific PixivID selector
-		  martist = $('div[class=resultcontentcolumn] > a:nth-child(2)').html();
-		  if (martist != null){
-			  if (Rtype == "Pixiv"){
-				  art_link = "Result Type: ``Pixiv``, Be sure to check for Albums on Pixiv results, Artist:  http://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + martist;
-			  } else if (Rtype == "Twitter") {
-				  art_link = "Result Type: ``Twitter``, printing raw along with link : ```" + safeName + ",  " + safeArtist + " ```" + Tmatch;
-			  } else {
-				  art_link = "Result Type: ``Nonstandard``, printing raw (Maybe you can make some sense of this): ```" + safeName + ",  " + safeArtist + " ```";
-			  }
-		  } else {
-			  art_link = ", Couldn't find sauce at all! :sob:";
-		  }
-		  
-		msg.reply( pb + 'match probability: ``' + mpercent  + " `` " + art_link) 
-	} else {
-		console.log("We’ve encountered an error: " + error);
-	}
-});
-} else{
-		msg.reply("I'm only able to search images, make sure it's a valid image extension! (jpeg | jpg | gif | png)");
-	};
-  }
-}
+    name: 'sauce',
+    help: "Submit an image for indexing on IQDB.",
+    aliases: ['source'],
+    module: 'default',
+    timeout: 10,
+    level: 0,
+    //To-Do: Fucking yeah
+
+    fn: function(msg, suffix, bot) {
+        if (suffix.length < 1) {
+            msg.reply('You need an image to search!');
+        } else {
+            msg.channel.sendTyping()
+            var request = require("request"),
+                url = "https://saucenao.com/search.php?db=999&output_type=2&numres=16&url="+suffix+"&api_key="+config.api_keys.sauce;
+
+            //Alert for non-image
+            if (suffix.match(/\.(jpeg|jpg|gif|png)$/)) {
+
+                request(url, function(error, response, body) {
+                    if (!error) {
+						var sbody = JSON.parse(body)
+						var results = (sbody.results[0])
+						var similarity = (sbody.results[0].header.similarity)
+						var indexer = (sbody.results[0].header.index_name)
+						var thumbnail = (sbody.results[0].header.thumbnail)
+						console.log(results)
+						
+						//result sorting
+						//Grabs availiable link, in order of this set priority, and defaults eventually
+						//This way, only a single link is displayed (the most relevant one?)
+						//Do all of these need (sbody.results[0].data.source) checks?
+						
+						if (indexer.indexOf("Pixiv") !== -1){
+							var author = (sbody.results[0].data.member_name)
+							var link = (sbody.results[0].data.pixiv_id)
+							var rTitle = (sbody.results[0].data.title)
+							var link = "http://www.pixiv.net/member_illust.php?mode=medium&illust_id=" + link;
+						} else if(indexer.indexOf("Sankaku") !== -1){
+							var author = (sbody.results[0].data.member_name)
+							var sID = (sbody.results[0].data.sankaku_id)
+							var link = "https://chan.sankakucomplex.com/post/show/" + sID;
+						} else if(indexer.indexOf("e621") !== -1){
+							var author = (sbody.results[0].data.creator)
+							var sID = (sbody.results[0].data.e621_id)
+							var link = "https://e621.net/post/show/" + sID;
+						} else {
+							var author = (sbody.results[0].data.creator)
+							var link = (sbody.results[0].data.source)
+							var rTitle = "Untitled"
+						}
+						
+						if(similarity > 90){
+							mReaction = "(ﾉ◕ヮ◕)ﾉ*:･ﾟ✧ "
+						}else{
+							mReaction = "¯\\_(ツ)\_/¯"
+						}
+
+						//Array the uncommon artist links if present
+						//Do this on a case-by-case basis
+						linkArray = []
+						
+						
+						
+						//Deliver message
+                        msg.reply("", false, {
+                                    color: 0x3498db,
+                                    author: {
+                                        name: similarity + "% match " + mReaction
+                                    },
+                                    thumbnail: {
+                                        url: thumbnail
+                                    },
+                                    //description takes lots of room on mobile, so disabled for now
+                                    title: "",
+                                    //timestamp: date,
+                                    fields: [{
+                                        name: "Author: " + author + " -- ["+rTitle+"]",
+                                        value: "Sauce: " + link,
+                                    }],
+                                    footer: {
+                                        text: "" + indexer
+                                    }
+                                })
+
+                    } else {
+                        console.log("We’ve encountered an error: " + error);
+                    }
+                });
+            } else {
+                msg.reply("I'm only able to search images, make sure it's a valid image extension! (jpeg | jpg | gif | png)");
+            };
+        }
+    }
 }
 
 //Awwnime reddit picture fetch

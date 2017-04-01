@@ -8,9 +8,9 @@ For simplicity, commands shall be included in "command.js", as they are in the c
 1. Altered relog handler to allow reconnections up to 10 times (instead of dying on the second attempt).
 2. Altered startup to reflect such onto the bot's "Now playing", since my external libraries load after the bot connects.
 3. Added "youtube tripping", which fires when the bot detects a youtube link, to provide useful information(selectively ignores itself and other bots/rooms). 
-<p align="center">
-![YTTrip](http://i.imgur.com/SaVsrti.png "YTTrip")
-</p>
+
+![YTTrip](http://i.imgur.com/SaVsrti.png)
+
 
 ## Commands
 1. [color (args)]: Resolves user's main role (The one that defines their color), and sets it to a user supplied value.
@@ -18,18 +18,18 @@ For simplicity, commands shall be included in "command.js", as they are in the c
 2. [awwnime]: Returns random picture from the front page of Awwnime and related reddit boards. 
 3. [radio]: Attempts to retrieve title information from the current audio stream.
 4. [mm]: Magic message test iterator. Still used for testing.
-<p align="center">
+
 ![MagicMessage](http://i.imgur.com/abLK3Fv.gif "MagicMessage")
-</p>
+
 5. [sauce (args)]: Submits user supplied image to SauceNao (or IQDB) image search.
 	- Embed displays -guessed- image from search, to aid visibility of result correctness.
 	- Currently, only link are the defining order, and are sorted from highest to lowest priority:
 	- Pixiv > Sankaku > e621 > default(if present)
-<p align="center">
+
 ![Pixiv result type](http://i.imgur.com/wfT7e28.png "Pixiv result type")
 ![Nonstandard/Other](http://i.imgur.com/rwc3XMn.png "Nonstandard/Other result type")
 ![Incorrect result](http://i.imgur.com/HF5jSUi.png "Incorrect result")
 
-</p>
+
 
 

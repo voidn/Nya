@@ -1,3 +1,5 @@
+//Boop
+
 Commands.discordStatus = {
   name: 'discordStatus',
   help: "Discord, are you okay?",
